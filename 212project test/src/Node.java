@@ -12,7 +12,7 @@ public class Node<T> {
 		next = null;
 	}
 
-	// to use in insertEvent *******************
+	// to use in insertEvent ******************
 	public void setNext(Node<T> head) {
 		
 		
