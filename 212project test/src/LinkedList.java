@@ -234,25 +234,7 @@ public class LinkedList<T extends Comparable<T>> {
 	
 
 
-//	public Contact deletContactsEvents(Contact contact) {
-//	contact.events.findFirst();
-//	Node<T> cur = head;
-//	while ( cur != null) { 
-//		Event tempEvent = contact.events.retrieve();
-//		if (!events.serchEvent(tempEvent)) {
-//			Event Update_Event = events.retrieve();
-//			Update_Event.contactsNames.deletEventContactsName(contact.name);
-//			if (Update_Event.contactsNames.empty()) {
-//				events.deletEvent(tempEvent);
-//				System.out.println("Delete event, No cantact particapate");
-//			} else
-//				events.update(Update_Event);
-//
-//		}
-//		contact.events.findNext();
-//	}
-//	return contact;
-//	}
+
 	public String deletEventContactsName(String name) {
 		Node<T> pre = head;
 		Node<T> cur = head.next;
