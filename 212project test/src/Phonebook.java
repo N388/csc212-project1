@@ -239,19 +239,9 @@ public class Phonebook {
 							contact.events.findFirst();
 							while (contact.events.current != null) {
 								Event tempEvent = contact.events.retrieve();
-								if (!events.serchEvent(tempEvent)) {
-									Event Update_Event = events.retrieve();
-									Update_Event.contactsNames.deletEventContactsName(contact.name);
-									if (Update_Event.contactsNames.empty()) {
-										events.deletEvent(tempEvent);
-										System.out.println("\nDelete event, No cantact particapate");
-									} else
-										events.update(Update_Event);
-
-								}
+								events.deletEvent(tempEvent);
 								contact.events.findNext();
 							}
-
 						}
 						System.out.println("\nContact Deleted Successfully!");
 						System.out.println(contact);
@@ -272,11 +262,9 @@ public class Phonebook {
 				System.out.print("\nEnter contact name:");
 				contact.name = keyboard.nextLine();
 				
-
-				boolean eventInitialised = false;
-				boolean eventContactsNames = false;
-
-				if (!contacts.empty() && contacts.searchContact(contact.name) == false) {
+				
+				//check if the contact exists or not
+				if (contacts.searchContact(contact.name)) {
 					System.out.print("\nEnter event date and time (MM/DD/YYYY HH:MM): ");
 					event.date = new Date(keyboard.next());
 					keyboard.nextLine();
@@ -285,30 +273,14 @@ public class Phonebook {
 					event.location = keyboard.nextLine();
 
 					contact = contacts.retrieve();
-					eventContactsNames = contact.addEvent(event);
-					if (eventContactsNames) {
-
-						contacts.update(contact);
-						if (!events.empty() && events.serchEvent(event)) {
-							Event foundEvent = events.retrieve();
-							if ((foundEvent.date.compareTo(event.date) == 0)
-									&& (foundEvent.time.compareTo(event.time) == 0)
-									&& (foundEvent.location.compareTo(event.location) == 0)) {
-								foundEvent.contactsNames.insertContact(contact.name);
-								events.update(foundEvent);
-								eventInitialised = true;
-							}
-						}
-						if (!eventInitialised) {
-
-							event.contactsNames.insertContact(contact.name);
-							events.insertEvent(event);
-						}
-						System.out.println("\nEvent scheduled successfully!");
+					
+					//if the contact has event complexity event would not be added
+					if (contact.addEvent(event)) {
+							System.out.println("\n Event scheduled successfully!");
 					} else
-						System.out.println("\nconflicted Events with the contact");
+						System.out.println("\n conflicted Events with the contact");
 				} else
-					System.out.println("\nCantcat does not exists!");
+					System.out.println("\n Cantcat does not exists!");
 
 				break;
 			}

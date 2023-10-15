@@ -6,7 +6,7 @@ public class Contact implements Comparable<Contact> {
 
 	public String name, phonenumber, email, address, notes;
 	public Date birthday;
-	public LinkedList<Event> events ;// قد تحتاج توصيل
+	LinkedList<Event> events = new LinkedList<Event>();// عرفته بطريقة ثانية
 
 	public Contact() {
 		name = null;
@@ -54,14 +54,18 @@ public class Contact implements Comparable<Contact> {
 		
 		}
 	
+	
+	//this method will check if the contact does not have events complexity
+	//it will return false if he has and true if the event added successfully
 	public boolean addEvent( Event event)  
     {  
         if (! events.empty())  
         {  
             events.findFirst();  
-            while(events.current != null)   {  
-                if ((events.retrieve().date.compareTo(event.date) == 0)   
-                        && (events.retrieve().time.compareTo(event.time) == 0))  
+            while(events.current != null)   { 
+            	//check if contact has events complexity
+                if ((events.retrieve().compareTo(event)  == 0) 
+                	&& (events.retrieve().compareTo(event.date) == 0))
                     return false;  
             }  
       } 

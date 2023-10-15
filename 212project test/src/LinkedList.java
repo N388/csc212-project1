@@ -76,10 +76,10 @@ public class LinkedList<T extends Comparable<T>> {
 	
 	
 	//this method will search for a contact by 4 of his attributes
-	//true if not found, false if found
+	//true if found, false if not
 	public boolean searchContact(String contact) {
-		if (empty())           //احتمال يكون فيه خطأ هنا لان ما حددنا البحث بالليست
-			return true;
+		if (empty())      
+			return false;
 		Node<T> cur = head;
 		while (cur != null) {
 			if (((Contact) cur.data).name.compareTo(contact) == 0
@@ -87,27 +87,27 @@ public class LinkedList<T extends Comparable<T>> {
 					|| ((Contact) cur.data).address.compareTo(contact) == 0
 					|| ((Contact) cur.data).phonenumber.compareTo(contact) == 0)  {
 						this.current = cur;																	
-				return false;
+				return true;
 			}
 			cur = cur.next;
 		}
-		return true;
+		return false;
 	}
 	
 	//this method will search for a contact using it's birthday
-	//true if not found, false if found
+	//true if found, false if not
 	public boolean searchContactBirthday(Date date) {
 		if (empty())
-			return true;
+			return false;
 		Node<T> cur = head;
 		while (cur != null) {
 			if (((Contact) cur.data).birthday.compareTo(date) == 0) {
 											this.current=cur; //****add this							
-				return false;
+				return true;
 			}
 			cur = cur.next;
 		}
-		return true;
+		return false;
 	}
 	
 	
@@ -148,21 +148,21 @@ public class LinkedList<T extends Comparable<T>> {
 	}
 	
 	//this method will search for an event by his title of contactsName
-	//true if not found, false if found
+	//true if found, false if not
 	public boolean serchEvent(Event event) {
 		if (empty())
-			return true;
+			return false;
 		Node<T> cur = head;
 		while (cur != null) {
-			if (((Event) cur.data).contactsNames.compareTo(event.contactsNames) == 0
+			if (((Event) cur.data).name.compareTo(event.name) == 0
 					|| ((Event) cur.data).title.compareTo(event.title) == 0) {
 				this.current = cur;
-				return false;
+				return true;
 			}
 				
 			cur = cur.next;
 		}
-		return true;
+		return false;
 	}
 	
 	
@@ -230,48 +230,6 @@ public class LinkedList<T extends Comparable<T>> {
 	
 
 
-
-	
-
-
-
-	public String deletEventContactsName(String name) {
-		Node<T> pre = head;
-		Node<T> cur = head.next;
-		if (serchEventContactsName(name) == true)
-			return null;
-		else if (serchEventContactsName(name) == false && current.data == head.data) {
-			head = head.next;
-			return name;    
-		} else {
-			while (cur != null) {
-				if (serchEventContactsName(name) == false && current.data == cur.data) {
-					pre.next = cur.next;
-					return name; 
-				}
-				pre = cur;
-				cur = cur.next;
-			}
-			return null;
-		}
-	}
-	
-	//this method will search in a linked list for contacts  in an event 
-		//true if not found, false if found
-	public boolean serchEventContactsName(String name) {
-		if (empty())
-			return true;
-		Node<T> cur = head;
-		while (cur != null) {
-			if (((String)cur.data).compareTo((String)name) == 0) {
-				this.current = cur;
-				return false;
-			}
-				
-			cur = cur.next;
-		}
-		return true;
-	}
 
 	public int compareTo(LinkedList<String> contactsNames) {
 		// TODO Auto-generated method stub
