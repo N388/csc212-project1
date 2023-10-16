@@ -33,26 +33,26 @@ public class Phonebook {
 
 			// Add a contact
 			case 1: {
-				Contact contact = new Contact();
-				String name = new String();
-				System.out.print("\nEnter the contact's name: ");
-				name = keyboard.nextLine();
 				keyboard.nextLine();
+				Contact contact = new Contact();
+				System.out.print("\nEnter the contact's name: ");
+				contact.name = keyboard.nextLine();
+				
+				
 
-				if (contacts.searchContactName(name)) {
+				if (contacts.searchContactName(contact.name)) {
+					
 					System.out.println("\nContact name already exists!!");
 					break;
 				} else {
 					System.out.print("Enter the contact's phone number:");
-					String phonenumber = keyboard.nextLine();
+					contact.phonenumber = keyboard.nextLine();
 
-					if (contacts.searchContactPhonenumber(phonenumber)) {
+					if (contacts.searchContactPhonenumber(contact.phonenumber)) {
 						System.out.println("Contact phone number already exists!!");
 						break;
 					} else {
-						//if the name and phone number doesn't exists they will by added here
-						contact.name = name;
-						contact.phonenumber = phonenumber;
+						
 						
 						System.out.print("Enter the contact's email address: ");
 						contact.email = keyboard.nextLine();
@@ -84,14 +84,16 @@ public class Phonebook {
 
 				System.out.print("\nEnter your choice: ");
 				int input2 = keyboard.nextInt();
-				keyboard.nextLine();
+				
 
 				switch (input2) {
 				case 1: {
+					keyboard.nextLine();
 					Contact contact = new Contact();
 					System.out.print("\nEnter the contact's name: ");
 					contact.name = keyboard.nextLine();
-
+					
+					
 					if (contacts.empty())
 						System.out.println("\nContact not found!");
 					else {
@@ -114,6 +116,7 @@ public class Phonebook {
 				}
 
 				case 2: {
+					keyboard.nextLine();
 					Contact contact = new Contact();
 					System.out.print("\nEnter the contact's phone number:");
 					contact.phonenumber = keyboard.nextLine();
@@ -123,21 +126,26 @@ public class Phonebook {
 					else {
 						contacts.findFirst();
 						while (contacts.current != null) {
-								if (contacts.searchContactPhonenumber(contact.phonenumber)){
+							if (contacts.searchContactPhonenumber(contact.phonenumber)) {
 								System.out.println("\nContact found!");
 								System.out.println(contacts.retrieve());
-								
-								break; 
-							} 
-								contacts.findNext();
+
+								break;
 							}
-						
+							contacts.findNext();
+						}
+
+						if (contacts.searchContactPhonenumber(contact.phonenumber) == false) {// add if
+							System.out.println("\nContact does not exists!!");
+							break;
+
+						}
 					}
-					if(contacts.searchContactPhonenumber(contact.phonenumber) == false) //add if
-						System.out.println("\nContact does not exists!!");
 					break;
+
 				}
 				case 3: {
+					keyboard.nextLine();
 					Contact contact = new Contact();
 					System.out.print("\nEnter the contact's email address:");
 					contact.email = keyboard.nextLine();
@@ -161,6 +169,7 @@ public class Phonebook {
 					break;
 				}
 				case 4: {
+					keyboard.nextLine();
 					Contact contact = new Contact();
 					System.out.print("\nEnter the contact's address:");
 					contact.address = keyboard.nextLine();
@@ -186,6 +195,7 @@ public class Phonebook {
 				}
 				//to search for a contact by it's birthday
 				case 5: {
+					keyboard.nextLine();
 					String birthday = new String();
 					System.out.print("\nEnter the contact's birthday(MM/dd/yyyy):");
 					birthday = keyboard.nextLine();
@@ -221,8 +231,9 @@ public class Phonebook {
 				break;
 			}
 
-			// Delete a contact and his name from involved events
+			// Delete a contact and his events
 			case 3: {
+				keyboard.nextLine();
 				Contact contact = new Contact();
 
 				System.out.print("\nEnter the contact's name: ");
@@ -242,13 +253,14 @@ public class Phonebook {
 
 			// Schedule an event
 			case 4: {
+				keyboard.nextLine();
 				Event event = new Event();
 
 				System.out.print("\nEnter event title:");
 				event.title = keyboard.nextLine();
 
 				Contact contact = new Contact();
-				contact.name = keyboard.nextLine(); //*** add scanner
+				contact.name = keyboard.nextLine(); 
 				System.out.print("\nEnter contact name:");
 				contact.name = keyboard.nextLine();
 				
@@ -264,9 +276,11 @@ public class Phonebook {
 
 					contact = contacts.retrieve();
 					
-					//if the contact has event complexity event would not be added
+					//if the contact has event complexity event would not be added 
 					if (contact.addEvent(event)) {
 							System.out.println("\n Event scheduled successfully!");
+							//here event will be added to contact's own event list
+							contact.events.insertEvent(event);
 					} else
 						System.out.println("\n conflicted Events with the contact");
 				} else
@@ -275,13 +289,9 @@ public class Phonebook {
 				break;
 			}
 
-			
-			
-			// اللي بعد هذا ما حدثته بعد ما حدثت ميثودات البحث
-			
-			
 			// Print event details
 			case 5: {
+				keyboard.nextLine();
 				System.out.println("Enter search criteria:");
 				System.out.println("1. contact name");
 				System.out.println("2. Event tittle");
@@ -289,39 +299,36 @@ public class Phonebook {
 				int input3 = keyboard.nextInt();
 				switch (input3) {
 				case 1: {
-
+					keyboard.nextLine();
 					Contact contact = new Contact();
 					System.out.print("\nEnter contact name:");
 					contact.name = keyboard.nextLine();
 
-					if (!contacts.empty()) {
-						if (contacts.searchContactName(contact.name) == false) {
+					
+						if (contacts.searchContactName(contact.name)) {
 							System.out.println("\nContact found!");
 							contact = contacts.retrieve();
 
 							contact.events.findFirst();
 
 							while (contact.events.current != null) {
-								Event event = contact.events.retrieve();
-								if (!events.empty() && events.serchEvent(event))
-									System.out.println(events.retrieve());
+								System.out.println(contact.events.retrieve());
 								contact.events.findNext();
 							}
 							if (contact.events.empty())
 								System.out.println("\nthis contact has no events!");
 						} else
 							System.out.println("\nCantcat does not exists!");
-					} else
-						System.out.println("\nCantcat does not exists!");
+					
 					break;
 				}
 
 				case 2: {
-					Event event = new Event();
+					keyboard.nextLine();
 					System.out.print("\nEnter the event title:");
-					event.title = keyboard.nextLine();
+					String title = keyboard.nextLine();
 
-					if (!events.empty() && events.serchEvent(event)) {
+					if (!events.empty() && events.searchEventTitle(title)) {
 						System.out.println("Event found!");
 						System.out.println(events.retrieve());
 					} else
@@ -335,25 +342,28 @@ public class Phonebook {
 
 			// Print contacts by first name
 			case 6: {
-				System.out.print("\nEnter the first name:");
-				String firstName = keyboard.nextLine();
+				keyboard.nextLine();
+			    System.out.print("\nEnter the first name:");
+			    String firstName = keyboard.nextLine();
 
-				if (contacts.empty())
-					System.out.println("\nNo Contacts have the first name!");
+			    if (contacts.empty()) {
+			        System.out.println("\nNo Contacts have the first name!");
+			        break; // Exit the case if the list is empty
+			    }
 
-				contacts.findFirst();
-				int i = 0;
-				while (contacts.current != null) {
-					String name = contacts.retrieve().name;
-					String[] allFirstName = name.split(" ");
+			    contacts.findFirst();
 
-					if (allFirstName[i].compareToIgnoreCase(firstName) == 0) {
-						System.out.println(contacts.retrieve() + "\n");
-					}
-					contacts.findNext();
-					i++;
-				}
-				break;
+			    while (contacts.current != null) {
+			        String fullName = contacts.retrieve().name;
+			        String[] allNames = fullName.split(" ");
+
+			        if (allNames.length > 0 && allNames[0].equalsIgnoreCase(firstName)) {
+			            System.out.println(contacts.retrieve() + "\n");
+			        }
+
+			        contacts.findNext();
+			    }
+			    break;
 			}
 
 			// Print all events alphabetically

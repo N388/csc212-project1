@@ -3,8 +3,8 @@
 import java.util.Date;
 public class LinkedList<T extends Comparable<T>> {
 
-	public Node<T> head;
-	public Node<T> current;
+	public Node<T> head = new Node<T>();
+	public Node<T> current = new Node<T>();
 	 //LinkedList<Event> events = new LinkedList<Event>();
 	
 
@@ -44,21 +44,23 @@ public class LinkedList<T extends Comparable<T>> {
 	
 	// this method will insert contacts in contacts list according
 	// to their alphabetical order
-	public boolean insertContact(T contact) {
+	public boolean insertContact(T val) {
+		
 		Node<T> tmp = null;
-		if (empty())
-			head = current = new Node<T>(contact);
-		else {
-			if (head.data.compareTo(contact) > 0) {
-				tmp = new Node<T>(contact);
+		if (empty()) {
+			head = current = new Node<T>(val);
+			
+		}else {
+			if (head.data.compareTo(val) > 0) {
+				tmp = new Node<T>(val);
 				tmp.next = head;
 				head = tmp;
 			} else {
 				Node<T> pre = head;
 				current = head.next;
-				tmp = new Node<T>(contact);
+				tmp = new Node<T>(val);
 				while (current != null) {
-					if (current.data.compareTo(contact) <= 0) {
+					if (current.data.compareTo(val) <= 0) {
 						pre = current;
 						current = current.next;
 					} else {
@@ -100,7 +102,9 @@ public class LinkedList<T extends Comparable<T>> {
 			return false;
 		Node<T> cur = head;
 		while (cur != null) {
-			if (((Contact)cur.data).name.equalsIgnoreCase(name)) {
+			
+			if (cur.data != null && ((Contact)cur.data).name != null 
+					&& ((Contact)cur.data).name.equalsIgnoreCase(name)) {
 				this.current=cur;							
 				return true;
 			}
@@ -110,9 +114,12 @@ public class LinkedList<T extends Comparable<T>> {
 	}
 	
 	public boolean searchContactPhonenumber(String phonenumber) {
-
-		if (((Contact) current.data).phonenumber.equalsIgnoreCase(phonenumber)) {
-			return true;
+		Node<T> cur = this.current;
+		while (cur != null) {
+			if (((Contact) current.data).phonenumber.equalsIgnoreCase(phonenumber)) {
+				return true;
+			}
+			cur = cur.next;
 		}
 		return false;
 	}
@@ -121,26 +128,37 @@ public class LinkedList<T extends Comparable<T>> {
 	//this method will search for a contact using it's birthday
 	//true if found, false if not
 	public boolean searchContactBirthday(Date date) {
-		
+		Node<T> cur = this.current;
+		while (cur != null) {
+
 			if (((Contact) current.data).birthday.compareTo(date) == 0) {
 				return true;
 			}
+			cur = cur.next;
+		}
 		return false;
 	}
 	
 	
 	public boolean searchContactEmail(String email) {
+		Node<T> cur = this.current;
+		while (cur != null) {
 			if (((Contact)current.data).email.equalsIgnoreCase(email)) {
 				return true;
 			}
+			cur = cur.next;
+	}
 			return false;
 	}
 	
 	public boolean searchContactAddress(String address) {
-		
+		Node<T> cur = this.current;
+		while (cur != null) {
 			if (((Contact)current.data).address.equalsIgnoreCase(address)) {
 				return true;
 			}
+			cur = cur.next;
+	}
 			return false;
 	}
 	
@@ -299,10 +317,7 @@ public class LinkedList<T extends Comparable<T>> {
 
 
 
-	public int compareTo(LinkedList<String> contactsNames) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+
 
 	
 }

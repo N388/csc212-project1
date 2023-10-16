@@ -3,8 +3,8 @@ public class Node<T> {
 	public Node<T> next;
 
 	public Node() {
-		data = null;
-		next = null;
+		data = data;
+		next = next;
 	}
 
 	public Node(T value) {

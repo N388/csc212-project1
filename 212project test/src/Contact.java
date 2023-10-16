@@ -6,11 +6,11 @@ public class Contact implements Comparable<Contact> {
 
 	public String name, phonenumber, email, address, notes;
 	public Date birthday;
-	LinkedList<Event> events = new LinkedList<Event>();// عرفته بطريقة ثانية
+	LinkedList<Event> events = new LinkedList<Event>();
 
 	public Contact() {
 		name = null;
-		phonenumber = null;
+		phonenumber = "";
 		email = null;
 		address = null;
 		notes = null;
@@ -76,6 +76,12 @@ public class Contact implements Comparable<Contact> {
 	public String toString() {
 		return "Name:" + name + "\nPhonenumber:" + phonenumber + "\nEmail Address:" + email + "\nAddress:" + address
 				+ "\nBirthady:" + birthday + "\nNotes:" + notes ;
+	}
+
+	@Override
+	public int compareTo(Contact o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }
