@@ -34,21 +34,26 @@ public class Phonebook {
 			// Add a contact
 			case 1: {
 				Contact contact = new Contact();
+				String name = new String();
 				System.out.print("\nEnter the contact's name: ");
-				contact.name = keyboard.nextLine();
+				name = keyboard.nextLine();
 				keyboard.nextLine();
 
-				if (!contacts.empty() && contacts.searchContact(contact.name)) {
-					System.out.println("\nContact name already exists!!1");
-					return;
+				if (contacts.searchContactName(name)) {
+					System.out.println("\nContact name already exists!!");
+					break;
 				} else {
 					System.out.print("Enter the contact's phone number:");
-					contact.phonenumber = keyboard.nextLine();
+					String phonenumber = keyboard.nextLine();
 
-					if (!contacts.searchContact(contact.phonenumber)) {
-						System.out.println("Contact phone number already exists!!2");
-						return;
+					if (contacts.searchContactPhonenumber(phonenumber)) {
+						System.out.println("Contact phone number already exists!!");
+						break;
 					} else {
+						//if the name and phone number doesn't exists they will by added here
+						contact.name = name;
+						contact.phonenumber = phonenumber;
+						
 						System.out.print("Enter the contact's email address: ");
 						contact.email = keyboard.nextLine();
 
@@ -92,17 +97,17 @@ public class Phonebook {
 					else {
 						contacts.findFirst();
 						while (contacts.current != null ) {
-							if(contacts.searchContact(contact.name) == true) {
+							if(contacts.searchContactName(contact.name)) {
 							
 								System.out.println("\nContact found!");
 								System.out.println(contacts.retrieve());
-								break; //****** add break
+								break; 
 							}
-								contacts.findNext();// بتطبع زين والا لا؟؟
+								contacts.findNext();
 						}
-							 if(contacts.searchContact(contact.name) == false ) {
+							 if(contacts.searchContactName(contact.name) == false) {
 								 System.out.println("\nContact does not exists!!");
-								 break; //***** add break
+								 break; 
 							}
 					}
 					break;
@@ -118,18 +123,17 @@ public class Phonebook {
 					else {
 						contacts.findFirst();
 						while (contacts.current != null) {
-								
-							if (!contacts.searchContact(contact.phonenumber))/*add !*/  {
+								if (contacts.searchContactPhonenumber(contact.phonenumber)){
 								System.out.println("\nContact found!");
 								System.out.println(contacts.retrieve());
 								
-								break; //***** add break
-							} ///***** deleted else
+								break; 
+							} 
 								contacts.findNext();
 							}
 						
 					}
-					if(contacts.current==null) //add if
+					if(contacts.searchContactPhonenumber(contact.phonenumber) == false) //add if
 						System.out.println("\nContact does not exists!!");
 					break;
 				}
@@ -143,18 +147,16 @@ public class Phonebook {
 					else {
 						contacts.findFirst();
 						while (contacts.current != null) {
-								
-							if (!contacts.searchContact(contact.email))/*add !*/  {
+							if (contacts.searchContactEmail(contact.email))  {
 								System.out.println("\nContact found!");
 								System.out.println(contacts.retrieve());
-								
-								break; //***** add break
-							} ///***** deleted else
+								// deleted break because emails are not unique
+							} 
 								contacts.findNext();
 							}
 						
 					}
-					if(contacts.current==null) //add if
+					if(contacts.searchContactEmail(contact.email) == false) 
 						System.out.println("\nContact does not exists!!");
 					break;
 				}
@@ -169,17 +171,16 @@ public class Phonebook {
 						contacts.findFirst();
 						while (contacts.current != null) {
 								
-							if (!contacts.searchContact(contact.address))/*add !*/  {
+							if (contacts.searchContactAddress(contact.address))	{
 								System.out.println("\nContact found!");
 								System.out.println(contacts.retrieve());
 								
-								break; //***** add break
-							} ///***** deleted else
+							}
 								contacts.findNext();
 							}
 						
 					}
-					if(contacts.current==null) //add if
+					if(contacts.searchContactAddress(contact.address) == false) 
 						System.out.println("\nContact does not exists!!");
 					break;
 				}
@@ -201,17 +202,16 @@ public class Phonebook {
 						contacts.findFirst();
 						while (contacts.current != null) {
 								
-							if (!contacts.searchContactBirthday(date))/*add !*/  {
+							if (contacts.searchContactBirthday(date)) {
 								System.out.println("\nContact found!");
 								System.out.println(contacts.retrieve());
-								
-								break; //***** add break
-							} ///***** deleted else
+								// deleted break because birthdays are not unique
+							} 
 								contacts.findNext();
 							}
 						
 					}
-					if(contacts.current==null) //add if
+					if(contacts.searchContactBirthday(date) == false ) 
 						System.out.println("\nContact does not exists!!");
 					break;
 				}
@@ -231,21 +231,11 @@ public class Phonebook {
 				if (contacts.empty())
 					System.out.println("\nContact not found!");
 				else {
-					contact = contacts.deletContact(contact);
-					if (contact == null)
-						System.out.println("\nContact not found!");
-					else {
-						if (!contact.events.empty()) {
-							contact.events.findFirst();
-							while (contact.events.current != null) {
-								Event tempEvent = contact.events.retrieve();
-								events.deletEvent(tempEvent);
-								contact.events.findNext();
-							}
-						}
+					if (contacts.deletContact(contact)) {
 						System.out.println("\nContact Deleted Successfully!");
-						System.out.println(contact);
-					}
+						break;
+						}
+					else System.out.println("\nContact not found!");
 				}
 				break;
 			}
@@ -264,7 +254,7 @@ public class Phonebook {
 				
 				
 				//check if the contact exists or not
-				if (contacts.searchContact(contact.name)) {
+				if (contacts.searchContactName(contact.name)) {
 					System.out.print("\nEnter event date and time (MM/DD/YYYY HH:MM): ");
 					event.date = new Date(keyboard.next());
 					keyboard.nextLine();
@@ -285,6 +275,11 @@ public class Phonebook {
 				break;
 			}
 
+			
+			
+			// اللي بعد هذا ما حدثته بعد ما حدثت ميثودات البحث
+			
+			
 			// Print event details
 			case 5: {
 				System.out.println("Enter search criteria:");
@@ -300,7 +295,7 @@ public class Phonebook {
 					contact.name = keyboard.nextLine();
 
 					if (!contacts.empty()) {
-						if (contacts.searchContact(contact.name) == false) {
+						if (contacts.searchContactName(contact.name) == false) {
 							System.out.println("\nContact found!");
 							contact = contacts.retrieve();
 
@@ -376,6 +371,9 @@ public class Phonebook {
 
 				break;
 			}
+			
+			case 8:
+				break;
 			default:
 				System.out.println("\nenter a number between 1 and 8");
 

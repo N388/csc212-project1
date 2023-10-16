@@ -42,22 +42,23 @@ public class LinkedList<T extends Comparable<T>> {
 	}
 	
 	
-	// change insert to insert contact*************************
-	public boolean insertContact(T val) {
+	// this method will insert contacts in contacts list according
+	// to their alphabetical order
+	public boolean insertContact(T contact) {
 		Node<T> tmp = null;
 		if (empty())
-			head = current = new Node<T>(val);
+			head = current = new Node<T>(contact);
 		else {
-			if (head.data.compareTo(val) > 0) {
-				tmp = new Node<T>(val);
+			if (head.data.compareTo(contact) > 0) {
+				tmp = new Node<T>(contact);
 				tmp.next = head;
 				head = tmp;
 			} else {
 				Node<T> pre = head;
 				current = head.next;
-				tmp = new Node<T>(val);
+				tmp = new Node<T>(contact);
 				while (current != null) {
-					if (current.data.compareTo(val) <= 0) {
+					if (current.data.compareTo(contact) <= 0) {
 						pre = current;
 						current = current.next;
 					} else {
@@ -77,32 +78,30 @@ public class LinkedList<T extends Comparable<T>> {
 	
 	//this method will search for a contact by 4 of his attributes
 	//true if found, false if not
-	public boolean searchContact(String contact) {
-		if (empty())      
-			return false;
-		Node<T> cur = head;
-		while (cur != null) {
-			if (((Contact) cur.data).name.compareTo(contact) == 0
-					||((Contact) cur.data).email.compareTo(contact) == 0
-					|| ((Contact) cur.data).address.compareTo(contact) == 0
-					|| ((Contact) cur.data).phonenumber.compareTo(contact) == 0)  {
-						this.current = cur;																	
-				return true;
-			}
-			cur = cur.next;
-		}
-		return false;
-	}
+//	public boolean searchContact(T contact) {
+//		if (empty())      
+//			return false;
+//		Node<T> cur = head;
+//		while (cur != null) {
+//			if (((Contact) cur.data).compareTo(contact) == 0) {
+////					||((Contact) cur.data).email.compareTo(contact) == 0
+////					|| ((Contact) cur.data).address.compareTo(contact) == 0
+////					|| ((Contact) cur.data).phonenumber.compareTo(contact) == 0)  {
+//						this.current = cur;																	
+//				return true;
+//			}
+//			cur = cur.next;
+//		}
+//		return false;
+//	}
 	
-	//this method will search for a contact using it's birthday
-	//true if found, false if not
-	public boolean searchContactBirthday(Date date) {
+	public boolean searchContactName(String name) {
 		if (empty())
 			return false;
 		Node<T> cur = head;
 		while (cur != null) {
-			if (((Contact) cur.data).birthday.compareTo(date) == 0) {
-											this.current=cur; //****add this							
+			if (((Contact)cur.data).name.equalsIgnoreCase(name)) {
+				this.current=cur;							
 				return true;
 			}
 			cur = cur.next;
@@ -110,30 +109,83 @@ public class LinkedList<T extends Comparable<T>> {
 		return false;
 	}
 	
+	public boolean searchContactPhonenumber(String phonenumber) {
+
+		if (((Contact) current.data).phonenumber.equalsIgnoreCase(phonenumber)) {
+			return true;
+		}
+		return false;
+	}
+
+	
+	//this method will search for a contact using it's birthday
+	//true if found, false if not
+	public boolean searchContactBirthday(Date date) {
+		
+			if (((Contact) current.data).birthday.compareTo(date) == 0) {
+				return true;
+			}
+		return false;
+	}
 	
 	
-	public Contact deletContact(Contact contact) {
+	public boolean searchContactEmail(String email) {
+			if (((Contact)current.data).email.equalsIgnoreCase(email)) {
+				return true;
+			}
+			return false;
+	}
+	
+	public boolean searchContactAddress(String address) {
+		
+			if (((Contact)current.data).address.equalsIgnoreCase(address)) {
+				return true;
+			}
+			return false;
+	}
+	
+	
+	//this method will return true if the contact was deleted, false if not
+	public boolean deletContact(Contact contact) {
 		Node<T> pre = head;
 		Node<T> cur = head.next;
-		if (searchContact(contact.name) == true)
-			return null;
-		else if (searchContact(contact.name) == false && current.data == head.data) {
+		if (searchContactName(contact.name)  && (current.data == head.data) ) { // هل استخدام == هنا صحيح؟ 
+			//لو نختصر خطوة حذف ايفتات الكونتاكت مع اللي بعده ب١٠ سطور يكون افضل**********************
+			//here will check if the contact has any event,if yes,events will
+			//be deleted
+			if (!contact.events.empty()) {
+				contact.events.findFirst();
+				while (contact.events.current != null) {
+					deletEvent(contact.name);
+					contact.events.findNext();
+				}
+			}
 			head = head.next;
-			return contact;    
+			return true;    
 		} else {
 			while (cur != null) {
-				if (searchContact(contact.name) == false && current.data == cur.data) {
+				if (searchContactName(contact.name)) {
+					//لو نختصر ذي مع اللي فوق**********************
+					//here will check if the contact has any event,if yes,events will
+					//be deleted
+					if (!contact.events.empty()) {
+						contact.events.findFirst();
+						while (contact.events.current != null) {
+							deletEvent(contact.name);
+							contact.events.findNext();
+						}
+					}
 					pre.next = cur.next;
-					return contact; 
+					return true; 
 				}
 				pre = cur;
 				cur = cur.next;
 			}
-			return null;
+			return false;
 		}
 	}
 	
-	// insert Events at the beginning*****************
+	// insert Event in events list
 	public boolean insertEvent(T val) {
 	    Node<T> tmp = new Node<>(val);
 
@@ -147,19 +199,34 @@ public class LinkedList<T extends Comparable<T>> {
 	    return true;
 	}
 	
-	//this method will search for an event by his title of contactsName
+	//this method will search for an event by his title
 	//true if found, false if not
-	public boolean serchEvent(Event event) {
+	public boolean searchEventTitle(String title) {
 		if (empty())
 			return false;
 		Node<T> cur = head;
 		while (cur != null) {
-			if (((Event) cur.data).name.compareTo(event.name) == 0
-					|| ((Event) cur.data).title.compareTo(event.title) == 0) {
+			if (((Event) cur.data).name.equalsIgnoreCase(title)) {
 				this.current = cur;
 				return true;
 			}
-				
+			cur = cur.next;
+		}
+		return false;
+	}
+	
+	//this method will search for an event by it's contact Name
+	//true if found, false if not
+
+	public boolean searchEventName(String name) {
+		if (empty())
+			return false;
+		Node<T> cur = head;
+		while (cur != null) {
+			if (((Event) cur.data).name.equalsIgnoreCase(name)) {
+				this.current = cur;
+				return true;
+			}
 			cur = cur.next;
 		}
 		return false;
@@ -207,24 +274,25 @@ public class LinkedList<T extends Comparable<T>> {
 	        }
 	    }
 	 
-	 public Event deletEvent(Event event) {
+	 //this method will delete an event by it's contact name only since the
+	 //only way to delete an event is by deleting it's contact from contacts list.
+	 //it will return true if the event deleted, false if not.
+	 public boolean deletEvent(String name) {
 			Node<T> pre = head;
 			Node<T> cur = head.next;
-			if (searchContact(event.title) == true)
-				return null;
-			else if (searchContact(event.title) == false && current.data == head.data) {
+			if (searchEventName(name) && current.data == head.data) {
 				head = head.next;
-				return event;    
+				return true;    
 			} else {
 				while (cur != null) {
-					if (searchContact(event.title) == false && current.data == cur.data) {
+					if (searchEventName(name) && current.data == cur.data) {
 						pre.next = cur.next;
-						return event; 
+						return true; 
 					}
 					pre = cur;
 					cur = cur.next;
 				}
-				return null;
+				return false;
 			}
 		}
 	

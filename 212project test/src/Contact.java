@@ -33,19 +33,16 @@ public class Contact implements Comparable<Contact> {
 	// this method will compare contact attributes if one of them is right it will
 	// return 0
 	// and other number otherwise
-	public int compareTo(Contact contact) {
-		int nameComparison = this.name.compareToIgnoreCase(contact.name);
-		int phoneNumberComparison = this.phonenumber.compareToIgnoreCase(contact.phonenumber);
-		int emailComparison = this.email.compareToIgnoreCase(contact.email);
-		int addressrComparison = this.address.compareToIgnoreCase(contact.address);
-		
-
-		if (nameComparison == 0 || phoneNumberComparison == 0 || emailComparison == 0 || addressrComparison == 0) {
-			return 0;
-		} else {
-			return nameComparison;
-		}
-	}
+//	public int compareTo(T contact) {
+//		if (this.name.equalsIgnoreCase(contact.name) == 0)
+//			if (this.phonenumber.compareToIgnoreCase(contact.phonenumber) == 0)
+//				if (this.email.compareToIgnoreCase(contact.email) == 0)
+//					if (this.address.compareToIgnoreCase(contact.address) == 0)
+//						return 0;
+//		
+//		return -1;
+//		
+//	}
 	public int compareTo(Date date) {
 		
 		int birthdayComparison = this.birthday.compareTo(date);
