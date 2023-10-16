@@ -254,7 +254,7 @@ public class Phonebook {
 				if (contacts.searchContactName(contact.name)) {
 					System.out.print("\nEnter event date and time (MM/DD/YYYY HH:MM): ");
 					event.date = new Date(keyboard.next());
-//					keyboard.nextLine();
+					keyboard.nextLine(); //عشان اليوزر يقدر يدخل اللوكيشن
 
 					System.out.print("\nEnter event location:");
 					event.location = keyboard.nextLine();
