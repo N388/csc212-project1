@@ -329,7 +329,7 @@ public class Phonebook {
 			        //contact = contacts.retrieve();
 
 			        // if the contact has event complexity event would not be added
-			        if (contact.addEvent(contact.name ,event, events) && events.insertEvent(event)) {
+			        if (contact.addEvent(contact.name ,event, events) && events.insertEventInOrder(event)) {
 
 			            System.out.println("\n Event scheduled successfully!");
 			            // here event will be added to contact's own event list
@@ -444,7 +444,8 @@ public class Phonebook {
 			case 7: {
 				
 				if (!events.empty()) {
-					events.EventsInAlphabeticalOrder();
+					//events will be printed directly because they were inserted in alphabetical order
+					events.printEvents();
 				} else
 					System.out.println("\nevents list is empty!");
 
