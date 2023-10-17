@@ -57,7 +57,7 @@ public class Contact implements Comparable<Contact> {
             	events.findNext();
             }  
       } 
-       	events.insertEventInOrder(event);   
+       	events.insertEventInOrder(event, event.title);   
         return true;  
         } 
     
@@ -72,7 +72,3 @@ public class Contact implements Comparable<Contact> {
 	public int compareTo(Contact contact) {
 	    return this.name.compareTo(contact.name);
 	}
-	
-	
-
-}
