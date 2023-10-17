@@ -1,12 +1,13 @@
 
-import java.util.Date;
 
-//النسخة النهائية
+import java.time.LocalDate;
+
+
 public class Contact implements Comparable<Contact> {
 
 	public String name, phonenumber, email, address, notes;
-	public Date birthday;
-	LinkedList<Event> events = new LinkedList<Event>();
+	public LocalDate birthday;
+	//LinkedList<Event> events = new LinkedList<Event>();
 
 	public Contact() {
 		name = null;
@@ -18,7 +19,7 @@ public class Contact implements Comparable<Contact> {
 		
 	}
 
-	public Contact(String name, String phonenumber, String email, String address, String notes, String birthady) {
+	public Contact(String name, String phonenumber, String email, String address, String notes, LocalDate birthady) {
 		super();
 		this.name = name;
 		this.phonenumber = phonenumber;
@@ -30,20 +31,8 @@ public class Contact implements Comparable<Contact> {
 
 	
 
-	// this method will compare contact attributes if one of them is right it will
-	// return 0
-	// and other number otherwise
-//	public int compareTo(T contact) {
-//		if (this.name.equalsIgnoreCase(contact.name) == 0)
-//			if (this.phonenumber.compareToIgnoreCase(contact.phonenumber) == 0)
-//				if (this.email.compareToIgnoreCase(contact.email) == 0)
-//					if (this.address.compareToIgnoreCase(contact.address) == 0)
-//						return 0;
-//		
-//		return -1;
-//		
-//	}
-	public int compareTo(Date date) {
+
+	public int compareTo(LocalDate date) {
 		
 		int birthdayComparison = this.birthday.compareTo(date);
 
@@ -54,16 +43,18 @@ public class Contact implements Comparable<Contact> {
 	
 	//this method will check if the contact does not have events complexity
 	//it will return false if he has and true if the event added successfully
-	public boolean addEvent( Event event)  
+	public boolean addEvent(String name, Event event, LinkedList<Event> events)  
     {  
-        if (! events.empty())  
-        {  
+        if (events.empty() == false)  {  
             events.findFirst();  
-            while(events.current != null)   { 
+            while(events.current != null) { 
+            	if(events.current.data.name.equalsIgnoreCase(name)) {
             	//check if contact has events complexity
-                if ((events.retrieve().compareTo(event)  == 0) 
-                	&& (events.retrieve().compareTo(event.date) == 0))
+            		if ((events.current.data.date.equals(event.date)) 
+            			&& (events.current.data.time.equals(event.time)))
                     return false;  
+            	}
+            	events.findNext();
             }  
       } 
         events.insertEvent(event);  
@@ -78,10 +69,10 @@ public class Contact implements Comparable<Contact> {
 				+ "\nBirthady:" + birthday + "\nNotes:" + notes ;
 	}
 
-	@Override
-	public int compareTo(Contact o) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int compareTo(Contact contact) {
+	    return this.name.compareTo(contact.name);
 	}
+	
+	
 
 }
