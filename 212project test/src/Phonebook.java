@@ -1,9 +1,12 @@
 
-//النسخة النهائية
-import java.util.Date;
-import java.text.SimpleDateFormat;
+
+import java.util.InputMismatchException;
 import java.util.Scanner;
-import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Phonebook {
 	public static void main(String[] args) {
@@ -12,7 +15,7 @@ public class Phonebook {
 		LinkedList<Contact> contacts = new LinkedList<Contact>();
 		LinkedList<Event> events = new LinkedList<Event>();
 		int input1 = 0;
-
+		
 		System.out.println("Welcome to the Linked List Phonebook!");
 
 		do {
@@ -26,9 +29,18 @@ public class Phonebook {
 			System.out.println("7.Print all events alphabetically");
 			System.out.println("8.Exit");
 
-			System.out.print("\nEnter your choice: ");
-
-			input1 = keyboard.nextInt();
+			boolean trueInput1 = false;
+			while (!trueInput1) {
+		        try {
+		            System.out.print("\nEnter your choice: ");
+		            input1 = keyboard.nextInt();
+		            trueInput1 = true;
+		        } catch (InputMismatchException e) {
+		            System.out.println("Invalid input. Please enter a valid integer.");
+		            keyboard.next(); // Consume the invalid input
+		        }
+		    }
+			
 			switch (input1) {
 
 			// Add a contact
@@ -56,9 +68,22 @@ public class Phonebook {
 
 						System.out.print("Enter the contact's address:");
 						contact.address = keyboard.nextLine();
-
+						
+						//this will check if the date is in right format.
+						boolean trueDate = false;
+						while(trueDate == false){
 						System.out.print("Enter the contact's birthday (MM/dd/yyyy):");
-						contact.birthday = new Date(keyboard.nextLine());
+						String birthday = keyboard.nextLine();
+
+						try {
+						    contact.birthday = LocalDate.parse(birthday, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+						    trueDate = true;
+						} catch (DateTimeParseException e) {
+							System.out.println("Invalid date format. Please use MM/dd/yyyy.");
+						}
+						
+						}
+						
 
 						System.out.print("Enter any notes for the contact:");
 						contact.notes = keyboard.nextLine();
@@ -79,9 +104,20 @@ public class Phonebook {
 				System.out.println("4. Address");
 				System.out.println("5. Birthday");
 
-				System.out.print("\nEnter your choice: ");
-				int input2 = keyboard.nextInt();
-
+				
+				int input2 = 0;
+				boolean trueInput2 = false;
+				while (!trueInput2) {
+			        try {
+			            System.out.print("\nEnter your choice: ");
+			            input2 = keyboard.nextInt();
+			            trueInput2 = true;
+			        } catch (InputMismatchException e) {
+			            System.out.println("Invalid input. Please enter a valid integer.");
+			            keyboard.next(); // Consume the invalid input
+			        }
+			    }
+				
 				switch (input2) {
 				case 1: {
 					keyboard.nextLine();
@@ -185,35 +221,44 @@ public class Phonebook {
 				}
 				// to search for a contact by it's birthday
 				case 5: {
-					keyboard.nextLine();
-					String birthday = new String();
-					System.out.print("\nEnter the contact's birthday(MM/dd/yyyy):");
-					birthday = keyboard.nextLine();
-					SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");// to get from String to Date
-					Date date = null;
-					try {
-						date = dateFormat.parse(birthday);
-					} catch (ParseException e) {
-						System.out.println("\nInvalid date format. Please use MM/dd/yyyy.");
-					}
-					if (contacts.empty() || contacts.searchContactBirthday(date) == false) {
-						System.out.println("\nContact not found!");
-						break;
-					}
-					else {
-						contacts.findFirst();
-						while (contacts.current != null) {
+				    keyboard.nextLine();
+				    LocalDate date = null;
+				    
+				    //this will check if the date is in right format.
+					boolean trueDate = false;
+					while(trueDate == false){
+				    System.out.print("\nEnter the contact's birthday(MM/dd/yyyy):");
+				    String birthday = keyboard.nextLine();
 
-							if (contacts.searchContactBirthday(date)) {
-								System.out.println("\nContact found!");
-								System.out.println(contacts.retrieve());
-								// deleted break because birthdays are not unique
-							}
-							contacts.findNext();
-						}
+				    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+				   
 
+				    try {
+				        date = LocalDate.parse(birthday, formatter);
+				        trueDate = true;
+				    } catch (DateTimeParseException e) {
+				    	
+				    	System.out.println("\nInvalid date format. Please use MM/dd/yyyy.");
+				     }
+				    
 					}
-					break;
+				       
+
+				    if (contacts.empty() || !contacts.searchContactBirthday(date)) {
+				        System.out.println("\nContact not found!");
+				        break;
+				    } else {
+				        contacts.findFirst();
+				        while (contacts.current != null) {
+				            if (contacts.searchContactBirthday(date)) {
+				                System.out.println("\nContact found!");
+				                System.out.println(contacts.retrieve());
+				                // deleted break because birthdays are not unique
+				            }
+				            contacts.findNext();
+				        }
+				    }
+				    break;
 				}
 				}
 				break;
@@ -230,7 +275,7 @@ public class Phonebook {
 				if (contacts.empty())
 					System.out.println("\nContact not found!");
 				else {
-					if (contacts.deletContact(contact)) {
+					if (contacts.deletContact(contact, events)) {
 						System.out.println("\nContact Deleted Successfully!");
 						break;
 					} else
@@ -241,38 +286,60 @@ public class Phonebook {
 
 			// Schedule an event
 			case 4: {
-				keyboard.nextLine();
-				Event event = new Event();
-				Contact contact = new Contact();
-				System.out.print("\nEnter event title:");
-				event.title = keyboard.nextLine();
+			    keyboard.nextLine();
+			    Event event = new Event();
+			    Contact contact = new Contact();
+			    System.out.print("\nEnter event title:");
+			    event.title = keyboard.nextLine();
 
-				System.out.print("\nEnter contact name:");
-				contact.name = keyboard.nextLine();
+			    System.out.print("\nEnter contact name:");
+			    contact.name = event.name = keyboard.nextLine();
+			    
 
-				// check if the contact exists or not
-				if (contacts.searchContactName(contact.name)) {
-					System.out.print("\nEnter event date and time (MM/DD/YYYY HH:MM): ");
-					event.date = new Date(keyboard.next());
-					keyboard.nextLine(); //عشان اليوزر يقدر يدخل اللوكيشن
+			    // check if the contact exists or not
+			    if (contacts.searchContactName(contact.name)) {
+			        boolean trueDate = false;
+			        while (!trueDate) {
+			            System.out.print("\nEnter event date and time (MM/DD/YYYY HH:MM): ");
+			            String dateAndTime = keyboard.nextLine();
 
-					System.out.print("\nEnter event location:");
-					event.location = keyboard.nextLine();
+			            
+			          //this try and catch will check if the date and time in right format.
+			            try {
+			                
+			            	// date and time here will separated into two variables
+			                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
 
-					contact = contacts.retrieve();
+			                LocalDateTime dateTime = LocalDateTime.parse(dateAndTime, formatter);
 
-					// if the contact has event complexity event would not be added
-					if (contact.addEvent(event) && contact.events.insertEvent(event)) {
+			                LocalDate date = dateTime.toLocalDate();
+			                LocalTime time = dateTime.toLocalTime();
+			                event.date = date;
+			                event.time = time;
 
-						System.out.println("\n Event scheduled successfully!");
-						// here event will be added to contact's own event list
+			                trueDate = true; 
+			            } catch (DateTimeParseException e) {
+			                System.out.println("Invalid date format. Please use MM/dd/yyyy HH:mm.");
+			            }
+			        }
 
-					} else
-						System.out.println("\n conflicted Events with the contact");
-				} else
-					System.out.println("\n Cantcat does not exists!");
+			        System.out.print("\nEnter event location:");
+			        event.location = keyboard.nextLine();
 
-				break;
+			        //contact = contacts.retrieve();
+
+			        // if the contact has event complexity event would not be added
+			        if (contact.addEvent(contact.name ,event, events) && events.insertEvent(event)) {
+
+			            System.out.println("\n Event scheduled successfully!");
+			            // here event will be added to contact's own event list
+
+			        } else
+			            System.out.println("\n conflicted Events with the contact");
+			    } else
+			        System.out.println("\n Cantcat does not exists!");
+
+			    break;
 			}
 
 			// Print event details
@@ -281,39 +348,54 @@ public class Phonebook {
 				System.out.println("Enter search criteria:");
 				System.out.println("1. contact name");
 				System.out.println("2. Event title");
-				System.out.print("\nEnter your choice:");
-				int input3 = keyboard.nextInt();
+				
+				
+				int input3 = 0;
+				boolean trueInput3 = false;
+				while (!trueInput3) {
+			        try {
+			            System.out.print("\nEnter your choice: ");
+			            input3 = keyboard.nextInt();
+			            trueInput3 = true;
+			        } catch (InputMismatchException e) {
+			            System.out.println("Invalid input. Please enter a valid integer.");
+			            keyboard.next(); 
+			        }
+			    }
 				switch (input3) {
 				case 1: {
 					keyboard.nextLine();
-					Contact contact = new Contact();
+					Event event = new Event();
 					System.out.print("\nEnter contact name:");
-					contact.name = keyboard.nextLine();
+					event.name = keyboard.nextLine();
 
-					if (contacts.searchContactName(contact.name)) {
+					if (contacts.searchContactName(event.name)) {
 						System.out.println("\nContact found!");
-						contact = contacts.retrieve();
+						
 
-						contact.events.findFirst();
+						events.findFirst();
 
-						while (contact.events.current != null) {
-							System.out.println(contact.events.retrieve());
-							contact.events.findNext();
+						while (events.current != null) {
+						    if (events.current.data.name.equalsIgnoreCase(event.name)) {
+						        System.out.println(events.retrieve());
+						    }
+						    events.findNext();
 						}
-						if (contact.events.empty())
-							System.out.println("\nthis contact has no events!");
+						if (events.empty())
+							System.out.println("\n this contact has no events!");
 					} else
-						System.out.println("\nCantcat does not exists!");
+						System.out.println("\n Cantcat does not exists!");
 
 					break;
 				}
 
 				case 2: {
 					keyboard.nextLine();
+					Event event = new Event();
 					System.out.print("\nEnter the event title:");
-					String title = keyboard.nextLine();
+					event.title = keyboard.nextLine();
 
-					if (!events.empty() && events.searchEventTitle(title)) {
+					if (events.searchEventTitle(event.title)) {
 						System.out.println("Event found!");
 						System.out.println(events.retrieve());
 					} else
@@ -327,40 +409,42 @@ public class Phonebook {
 
 			// Print contacts by first name
 			case 6: {
-				keyboard.nextLine();
-				System.out.print("\nEnter the first name:");
-				String firstName = keyboard.nextLine();
+			    keyboard.nextLine();
+			    System.out.print("\nEnter the first name:");
+			    String firstName = keyboard.nextLine();
 
-				if (contacts.empty()) {
-					System.out.println("\nNo Contacts have the first name!");
-					break; // Exit the case if the list is empty
-				}
+			    if (contacts.empty()) {
+			        System.out.println("\nNo Contacts have the first name!");
+			        break; 
+			    }
 
-				contacts.findFirst();
+			    contacts.findFirst();
+			    boolean found = false; //to check if at least one contact was found
 
-				while (contacts.current != null) {
-					String fullName = contacts.retrieve().name;
-					String[] allNames = fullName.split(" ");
+			    while (contacts.current != null) {
+			        String fullName = contacts.retrieve().name;
+			        String[] allNames = fullName.split(" ");
 
-					if (allNames.length > 0 && allNames[0].equalsIgnoreCase(firstName)) {
-						System.out.println(contacts.retrieve() + "\n");
-					}
+			        if (allNames.length > 0 && allNames[0].equalsIgnoreCase(firstName)) {
+			            System.out.println(contacts.retrieve() + "\n");
+			            found = true; //true if a contact was found
+			        }
 
-					contacts.findNext();
-				}
-				break;
+			        contacts.findNext();
+			    }
+
+			    if (!found) {
+			        System.out.println("No Contacts found with the first name: " + firstName);
+			    }
+
+			    break;
 			}
 
 			// Print all events alphabetically
 			case 7: {
-				int i = 0;
+				
 				if (!events.empty()) {
-					events.findFirst();
-					while (events.current != null) {
-						System.out.println("\n" + (i + 1) + ". Event : " + events.retrieve().title);
-						events.findNext();
-						i++;
-					}
+					events.EventsInAlphabeticalOrder();
 				} else
 					System.out.println("\nevents list is empty!");
 
@@ -368,14 +452,15 @@ public class Phonebook {
 			}
 
 			case 8:
+				System.out.println("\nGoodbye!");
 				break;
 			default:
-				System.out.println("\nenter a number between 1 and 8");
+				System.out.println("\n enter a number between 1 and 8");
 
 			}
 
 		} while (input1 != 8);
 
-		System.out.println("\nGoodbye!");
+		
 	}
-} 
+}
