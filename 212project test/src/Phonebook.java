@@ -329,7 +329,7 @@ public class Phonebook {
 			        //contact = contacts.retrieve();
 
 			        // if the contact has event complexity event would not be added
-			        if (contact.addEvent(contact.name ,event, events) && events.insertEventInOrder(event)) {
+			        if (contact.addEvent(contact.name ,event, events)) {
 
 			            System.out.println("\n Event scheduled successfully!");
 			            // here event will be added to contact's own event list
