@@ -12,9 +12,10 @@ public class Node<T> {
 		next = null;
 	}
 
-	// to use in insertEvent ******************
-	public void setNext(Node<T> head) {
-		
-		
+	
+	
+
+	public Object findNext() {
+		// TODO Auto-generated method stub
+		return null;
 	}
-}
