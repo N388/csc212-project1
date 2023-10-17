@@ -1,16 +1,18 @@
 
 
-import java.util.Date;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Event implements Comparable<Event> {
 
 	String title;
 	String name;
-	Date date;
-	String time;
+	LocalDate date;
+	LocalTime time;
 	String location;
-	LinkedList<Event> Events;
-//	LinkedList<String> contactsNames = new LinkedList<>();
+	
+
 
 	public Event() {
 		super();
@@ -21,10 +23,10 @@ public class Event implements Comparable<Event> {
 		this.location = null;
 	}
 
-	public Event(String title, String name, String date, String time, String location) {
+	public Event(String title, String name, LocalDate date, LocalTime time, String location) {
 		this.title = title;
 		this.name = name;
-		this.date = new Date();
+		this.date = date;
 		this.time = time;
 		this.location = location;
 
@@ -33,7 +35,7 @@ public class Event implements Comparable<Event> {
 	@Override
 	public String toString() {
 		String eventData = "\n Event title: " + title + "\n  contact name : " + name
-				+ "\n Event date and time (MM/DD/YYYY HH:MM): " + date + time + "\n Event location: " + location;
+				+ "\n Event date and time (MM/DD/YYYY HH:MM): " + date + " " + time + "\n Event location: " + location;
 		return eventData;
 	}
 
@@ -44,9 +46,8 @@ public class Event implements Comparable<Event> {
 	public int compareTo(Event event) {
 		int titleComparison = this.title.compareToIgnoreCase(event.title);
 		int nameComparison = this.name.compareToIgnoreCase( event.name);
-		int timeComparison = this.name.compareToIgnoreCase( event.time);
-
-		if (titleComparison == 0 || nameComparison == 0 || timeComparison == 0) {
+	
+		if (titleComparison == 0 || nameComparison == 0) {
 			return 0;
 		} else {
 			return titleComparison;
@@ -54,16 +55,28 @@ public class Event implements Comparable<Event> {
 	}
 	
 	//this method will compare event's date it will return 0 if the two dates are the same
-	public int compareTo(Date date) {
+	public int compareTo(LocalDate date) {
 		
 		int eventDateComparison = this.date.compareTo(date);
 
 			return eventDateComparison;
 		
 		}
+	
+	//this method will compare event's time it will return 0 if the two times are the same
+		public int compareTo(LocalTime time) {
+			
+			int eventTimeComparison = this.date.compareTo(date);
+
+				return eventTimeComparison;
+			
+			}
+
 
 	public static void printEventsAlphabetically(LinkedList<Event> events) {
 		events.EventsInAlphabeticalOrder();
+		
+
 	}
 
 }
