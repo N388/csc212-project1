@@ -178,24 +178,26 @@ public class LinkedList<T extends Comparable<T>> {
 	}
 	
 	// insert Event in events list
-	public boolean insertEvent(T val) {
-	    Node<T> tmp = new Node<>(val);
-
-	    if (empty()) {
-	        current = head = tmp;
+	public void insertEventInOrder(T event) {
+	    
+	    Node<T> tmp = new Node<>(event);
+	    
+	    
+	    if (head == null || ((Event)tmp.data).title.compareTo(((Event)head.data).title) <= 0) {
+	        tmp.next = head;
+	        head = tmp;
 	    } else {
-	        
-	        Node<T> last = head;
-	        while (last.next != null) {
-	            last = last.next;
+	       
+	        Node<T> current = head;
+	        while (current.next != null && ((Event)tmp.data).title.compareTo(((Event)current.next.data).title) > 0) {
+	            current = current.next;
 	        }
 	        
-	        last.next = tmp;
-
+	        tmp.next = current.next;
+	        current.next = tmp;
 	    }
-
-	    return true;
 	}
+
 	
 	//this method will search for an event by his title
 	//true if found, false if not
@@ -231,40 +233,21 @@ public class LinkedList<T extends Comparable<T>> {
 	
 	
 	//this method to print all events in alphabetical order (should be called from class Event??)
-	public void EventsInAlphabeticalOrder() {
-		if (head == null || head.next == null) {
-			return;
-		}
-
-		Node<T> sorted = null; // new sorted linked list
-
-		Node<T> current = head;
-
-		while (current != null) {
-			Node<T> next = current.next;
-
-			// Insert current node into sorted list
-			if (sorted == null || ((Event)current.data).title.compareTo(((Event)sorted.data).title) <= 0) {
-				current.next = sorted;
-				sorted = current;
-			} else {
-				Node<T> temp = sorted;
-				while (temp.next != null && current.data.compareTo(temp.next.data) > 0) {
-					temp = temp.next;
-				}
-				current.next = temp.next;
-				temp.next = current;
-			}
-
-			current = next;
-		}
-
-		head = sorted;
-		current = head;
-		while (current != null) {
-			System.out.println(((Event) current.data).title);
-			current = current.next;
-		}
+	public void printEvents() {
+	    
+	    if (head == null) {
+	        System.out.println("The list is empty.");
+	        return;
+	    }
+	    
+	    Node<T> current = head;
+	    
+	    while (current != null) {
+	       
+	        System.out.println(((Event) current.data).title);
+	        
+	        current = current.next;
+	    }
 	}
 	 
 	 //this method will delete an event by it's contact name only since the
