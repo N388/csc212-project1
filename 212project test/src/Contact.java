@@ -57,7 +57,7 @@ public class Contact implements Comparable<Contact> {
             	events.findNext();
             }  
       } 
-        events.insertEventInOrder(event);  
+        events.insertEvent(event);  
         return true;  
         } 
     
