@@ -190,7 +190,8 @@ public class LinkedList<T extends Comparable<T>> {
 	            last = last.next;
 	        }
 	        
-	        tmp = last.next;
+	        last.next = tmp;
+
 	    }
 
 	    return true;
