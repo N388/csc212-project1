@@ -178,7 +178,7 @@ public class LinkedList<T extends Comparable<T>> {
 	}
 	
 	// insert Event in events list
-	public void insertEventInOrder(T event) {
+	public boolean insertEventInOrder(T event) {
 	    
 	    Node<T> tmp = new Node<>(event);
 	    
@@ -186,6 +186,7 @@ public class LinkedList<T extends Comparable<T>> {
 	    if (head == null || ((Event)tmp.data).title.compareTo(((Event)head.data).title) <= 0) {
 	        tmp.next = head;
 	        head = tmp;
+	        return true;
 	    } else {
 	       
 	        Node<T> current = head;
@@ -195,6 +196,7 @@ public class LinkedList<T extends Comparable<T>> {
 	        
 	        tmp.next = current.next;
 	        current.next = tmp;
+	        return true;
 	    }
 	}
 
