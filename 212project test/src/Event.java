@@ -73,11 +73,6 @@ public class Event implements Comparable<Event> {
 			}
 
 
-	public static void printEventsAlphabetically(LinkedList<Event> events) {
-		//events will be printed directly because they were inserted in alphabetical order
-		events.printEvents();
-		
-
-	}
+	
 
 }
