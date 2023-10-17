@@ -224,7 +224,7 @@ public class LinkedList<T extends Comparable<T>> {
 			return false;
 		Node<T> cur = head;
 		while (cur != null) {
-			if (((Event) cur.data).name.equalsIgnoreCase(name)) {
+			if (((Contact) cur.data).name.equalsIgnoreCase(name)) {
 				this.current = cur;
 				return true;
 			}
