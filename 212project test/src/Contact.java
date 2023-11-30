@@ -72,3 +72,4 @@ public class Contact implements Comparable<Contact> {
 	public int compareTo(Contact contact) {
 	    return this.name.compareTo(contact.name);
 	}
+}
