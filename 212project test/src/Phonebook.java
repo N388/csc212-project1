@@ -1,6 +1,5 @@
 
 
-
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.time.LocalDate;
@@ -132,6 +131,8 @@ public class Phonebook {
 						break;
 					}
 					else {
+						
+						
 							if (contactsBST.search_nameContact(contact.name)) {
 								System.out.println("\nContact found!");
 								System.out.println(contactsBST.retrive());
@@ -271,10 +272,10 @@ public class Phonebook {
 				System.out.print("\nEnter the contact's name: ");
 				contact.name = keyboard.nextLine();
 
-				if (contacts.empty())
+				if (contactsBST.empty())
 					System.out.println("\nContact not found!");
 				else {
-					if (contacts.deletContact(contact, events)) {
+					if (contactsBST.deletContact(contact.name, events)) {
 						System.out.println("\nContact Deleted Successfully!");
 						break;
 					} else
