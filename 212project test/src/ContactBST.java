@@ -39,7 +39,7 @@ public boolean insertContact(String k,T val) {
 	}
 	p=new BSTContactNode<T>(k,val);
 	if(empty()) {
-		root=current=p;
+		current=root=p;
 	return true;
 	}
 	else {
@@ -52,12 +52,21 @@ public boolean insertContact(String k,T val) {
 		return true;	
 	}
 }
-public boolean remove_key(String key) {
+public boolean deletContact(String key,LinkedList<Event>events) {
 	Boolean removed=new Boolean(false);
 	BSTContactNode<T> p;
 	p=remove_aux(key,root,removed);
 	current=root=p;
-	return removed;
+	if(!events.empty()) {
+	if (events.searchEventName(((Contact)p.data).name)) {
+		events.findFirst();
+		while (events.current != null) {
+			events.deletEvent(((Contact)p.data).name);
+			events.findNext();
+		}
+	}
+	}
+	return removed.booleanValue();
 }
 public BSTContactNode<T> remove_aux(String key,BSTContactNode<T> p,Boolean flag){
 	BSTContactNode<T> q,child=null;
@@ -68,7 +77,7 @@ public BSTContactNode<T> remove_aux(String key,BSTContactNode<T> p,Boolean flag)
 	else if(((Contact)p.data).name.compareTo(key)<0)
 		p.right=remove_aux(key,p.right,flag);
 	else {
-		flag=true;
+		flag=flag.TRUE;
 		if(p.right !=null && p.left != null) {
 			q=find_min(p.right);
 			p.key=q.key;
@@ -98,6 +107,8 @@ public boolean search_nameContact(String p) {
 	return flag;
 }
 private boolean search_nameContact(BSTContactNode<T> p,String q,Boolean flag) {
+	if(p==null)
+		return false;
 	if(((Contact)p.data).name.compareTo(q)==0) {
 		current=p;
 		flag=true;
