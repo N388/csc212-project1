@@ -1,5 +1,6 @@
 
 
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.time.LocalDate;
@@ -12,12 +13,12 @@ public class Phonebook {
 	public static void main(String[] args) {
 
 		Scanner keyboard = new Scanner(System.in);
-		LinkedList<Contact> contacts = new LinkedList<Contact>();
+		ContactBST<Contact> contactsBST = new ContactBST<Contact>();
+		LinkedList<Contact> contacts=new LinkedList<Contact>();
 		LinkedList<Event> events = new LinkedList<Event>();
 		int input1 = 0;
 		
 		System.out.println("Welcome to the Linked List Phonebook!");
-
 		do {
 			System.out.println("\nPlease choose an option:");
 			System.out.println("1.Add a contact");
@@ -47,10 +48,11 @@ public class Phonebook {
 			case 1: {
 				keyboard.nextLine();
 				Contact contact = new Contact();
+				
 				System.out.print("\nEnter the contact's name: ");
 				contact.name = keyboard.nextLine();
-
-				if (contacts.searchContactName(contact.name)) {
+				
+				if (!contactsBST.empty() && contactsBST.search_nameContact(contact.name)) {
 
 					System.out.println("\nContact name already exists!!");
 					break;
@@ -88,7 +90,7 @@ public class Phonebook {
 						System.out.print("Enter any notes for the contact:");
 						contact.notes = keyboard.nextLine();
 
-						if (contacts.insertContact(contact))
+						if (contactsBST.insertContact(contact.name,contact))
 							System.out.println("\nContact added successfully!");
 					}
 				}
@@ -125,21 +127,18 @@ public class Phonebook {
 					System.out.print("\nEnter the contact's name: ");
 					contact.name = keyboard.nextLine();
 
-					if (contacts.empty() || contacts.searchContactName(contact.name) == false) {
+					if (contactsBST.empty() || !contactsBST.search_nameContact(contact.name)) {
 						System.out.println("\nContact not found!");
 						break;
 					}
 					else {
-						contacts.findFirst();
-						while (contacts.current != null) {
-							if (contacts.searchContactName(contact.name)) {
-
+							if (contactsBST.search_nameContact(contact.name)) {
 								System.out.println("\nContact found!");
-								System.out.println(contacts.retrieve());
+								System.out.println(contactsBST.retrive());
 								break;
 							}
-							contacts.findNext();
-						}
+							
+						
 						
 					}
 					break;
