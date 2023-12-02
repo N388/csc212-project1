@@ -12,9 +12,6 @@ public class Node<T> {
 		next = null;
 	}
 
-	
-	
-
 	public Object findNext() {
 		// TODO Auto-generated method stub
 		return null;

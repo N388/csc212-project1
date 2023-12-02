@@ -105,13 +105,13 @@ public class Event implements Comparable<Event> {
 			events.findFirst();
 			while (events.current != null) {
 				for (int i = 0; i < events.current.data.contactsNames.length; i++) {
-				if (compareContactNames(event.contactsNames, events.current.data.contactsNames) == 0) {
-					// check if contact has events complexity
-					if ((events.current.data.date.equals(event.date))
-							&& (events.current.data.time.equals(event.time)))
-						return false;
+					if (compareContactNames(event.contactsNames, events.current.data.contactsNames) == 0) {
+						// check if contact has events complexity
+						if ((events.current.data.date.equals(event.date))
+								&& (events.current.data.time.equals(event.time)))
+							return false;
+					}
 				}
-			}
 				events.findNext();
 			}
 		}
