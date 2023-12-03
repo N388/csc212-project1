@@ -16,7 +16,7 @@ public class Phonebook {
 		LinkedList<Event> events = new LinkedList<Event>();
 		int input1 = 0;
 
-		System.out.println("Welcome to the Linked List Phonebook!");
+		System.out.println("Welcome to the BST Phonebook!");
 		do {
 			System.out.println("\nPlease choose an option:");
 			System.out.println("1.Add a contact");
