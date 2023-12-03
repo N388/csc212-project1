@@ -48,4 +48,4 @@ public class Contact implements Comparable<Contact> {
 	public String getName() {
 		return name;
 	}
-}
+} 
