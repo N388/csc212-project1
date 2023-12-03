@@ -5,7 +5,8 @@ public class LinkedList<T extends Comparable<T>> {
 
 	public Node<T> head = new Node<T>();
 	public Node<T> current = new Node<T>();
-	 //LinkedList<Event> events = new LinkedList<Event>();
+	
+	//LinkedList<Event> events = new LinkedList<Event>();
 	
 
 	public LinkedList() {
@@ -145,10 +146,10 @@ public class LinkedList<T extends Comparable<T>> {
 			
 			//here will check if the contact has any event,if yes,events will
 			//be deleted
-			if (searchEventName(contact.name)) {
+			if (searchEventName(contact.name,events)) {
 				events.findFirst();
 				while (events.current != null) {
-					deletEvent(contact.name);
+					deletEvent(contact.name, events);
 					events.findNext();
 				}
 			}
@@ -160,10 +161,10 @@ public class LinkedList<T extends Comparable<T>> {
 					
 					//here will check if the contact has any event,if yes,events will
 					//be deleted
-					if (searchEventName(contact.name)) {
+					if (searchEventName(contact.name,events)) {
 						events.findFirst();
 						while (events.current != null) {
-							deletEvent(contact.name);
+							deletEvent(contact.name, events);
 							events.findNext();
 						}
 					}
@@ -177,6 +178,29 @@ public class LinkedList<T extends Comparable<T>> {
 		}
 	}
 	
+
+	// this method will check if the contact does not have events complexity
+	// it will return false if he has and true if the event added successfully
+	public boolean addEvent(Event event, LinkedList<Event> events,int size) {
+		if (events.empty() == false) {
+			events.findFirst();
+			while (events.current != null) {
+				for (int i = 0; i < events.current.data.contactsNames.length; i++) {
+					for (int j = 0; j < event.contactsNames.length; j++) {
+					if (event.contactsNames[j].compareToIgnoreCase(events.current.data.contactsNames[i]) == 0) {
+						// check if contact has events complexity
+						if ((events.current.data.date.equals(event.date))
+								&& (events.current.data.time.equals(event.time)))
+							return false;
+					}
+				}
+				}
+				events.findNext();
+			}
+		}
+		events.insertEventInOrder(event, event.title);
+		return true;
+	}
 	// insert Event in events list
 	public boolean insertEventInOrder(T event, String title) {
 	    
@@ -221,16 +245,18 @@ public class LinkedList<T extends Comparable<T>> {
 	
 	//this method will search for an event by it's contact Name
 	//true if found, false if not
-	public boolean searchEventName(String name) {
-		if (empty())
+	public boolean searchEventName(String name,LinkedList<Event> events) {
+		if (events.empty() == true)
 			return false;
-		Node<T> cur = head;
-		while (cur != null) {
-			if (((Contact) cur.data).name.equalsIgnoreCase(name)) {
-				this.current = cur;
-				return true;
+		
+		while (events.current != null) {
+									
+			for (int i = 0; i < events.current.data.contactsNames.length; i++) {
+				if (events.current.data.contactsNames[i].equalsIgnoreCase(name)) {
+					return true;
+				}
 			}
-			cur = cur.next;
+			events.findNext();
 		}
 		return false;
 	}
@@ -257,15 +283,15 @@ public class LinkedList<T extends Comparable<T>> {
 	 //this method will delete an event by it's contact name only since the
 	 //only way to delete an event is by deleting it's contact from contacts list.
 	 //it will return true if the event deleted, false if not.
-	 public boolean deletEvent(String name) {
+	 public boolean deletEvent(String name,LinkedList<Event> events ) {
 			Node<T> pre = head;
 			Node<T> cur = head.next;
-			if (searchEventName(name) && current.data == head.data) {
+			if (searchEventName(name, events) && current.data == head.data) {
 				head = head.next;
 				return true;    
 			} else {
 				while (cur != null) {
-					if (searchEventName(name) && current.data == cur.data) {
+					if (searchEventName(name, events) && current.data == cur.data) {
 						pre.next = cur.next;
 						return true; 
 					}
