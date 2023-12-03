@@ -221,29 +221,29 @@ public class ContactBST<T extends Comparable<T>> {
 
 	}
 
-	public boolean findFirstName(String firstName, Boolean found) {
-		Boolean flag = new Boolean(false);
-		flag = findFirstName(root, firstName, flag, found);
+	public boolean findFirstName(String p, String firstName) {
+		Boolean flag = false;
+		flag = findFirstName(root, p, firstName);
 		return flag;
 	}
 
-	private boolean findFirstName(BSTContactNode<T> p, String firstName, Boolean flag, Boolean found) {
+	private boolean findFirstName(BSTContactNode<T> p, String q, String firstName) {
 		if (p == null)
 			return false;
 
 		String fullName = ((Contact) p.data).name;
 		String[] allNames = fullName.split(" ");
 		if (allNames.length > 0 && allNames[0].equalsIgnoreCase(firstName)) {
-			System.out.println(retrive());
-			found = true;
+			System.out.println("\n" + retrive());
+			
 			current = p;
-			flag = true;
-			return flag;
+			
+			return true;
 		}
-		if (((Contact) p.data).name.compareTo(firstName) > 0)
-			return findFirstName(p.left, firstName, flag, found);
+		if (((Contact) p.data).name.compareTo(q) > 0)
+			return findFirstName(p.left, q, firstName);
 		else
-			return findFirstName(p.right, firstName, flag, found);
+			return findFirstName(p.right, q, firstName);
 
 	}
 
