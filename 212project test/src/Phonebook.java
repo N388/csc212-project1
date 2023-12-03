@@ -248,7 +248,7 @@ public class Phonebook {
 					if (contactsbBST.empty())
 						System.out.println("\nContact not found!");
 					else {
-						if (contactsbBST.deletContact(contact.name, events)) {
+						if (contactsbBST.deletContact(contact.name, events) == true) {
 							System.out.println("\nContact Deleted Successfully!");
 							break;
 						} else
@@ -283,6 +283,7 @@ public class Phonebook {
 						case 1: {
 							keyboard.nextLine();
 							Event event = new Event();
+							int size;
 							event.type = "event";
 							// Contact contact = new Contact();
 							System.out.print("\nEnter event title:");
@@ -290,10 +291,10 @@ public class Phonebook {
 
 							System.out.print("\nEnter contactsbBST name separated by a comma:");
 							String contactNames = keyboard.nextLine();
-
+							event.names = contactNames;
 							// Split the input string by commas
 							event.contactsNames = contactNames.split(",");
-
+							size = event.contactsNames.length;
 							// Trim leading and trailing whitespaces from each name
 							for (int i = 0; i < event.contactsNames.length; i++) {
 								event.contactsNames[i] = event.contactsNames[i].trim();
@@ -332,12 +333,12 @@ public class Phonebook {
 								event.location = keyboard.nextLine();
 
 								// if the contact has event complexity event would not be added
-								if (event.addEvent(event, events)) {
+								if (events.addEvent(event, events, size)) {
 
-									System.out.println("\n Event scheduled successfully!");
-
+									System.out.println("\nEvent scheduled successfully!");
+									break;
 								} else
-									System.out.println("\n conflicted Events with the contact");
+									System.out.println("\nconflicted Events with the contact");
 							}
 							break;
 
@@ -345,14 +346,17 @@ public class Phonebook {
 						// Schedule an appointment (with one contact only)
 						case 2: {
 							keyboard.nextLine();
+							int size = 1;
 							Event event = new Event();
 							event.type = "appointment";
 							// Contact contact = new Contact();
 							System.out.print("\nEnter appointment title:");
 							event.title = keyboard.nextLine();
-
+							event.contactsNames = new String[size];
 							System.out.print("\nEnter contact name:");
-							event.contactsNames[0] = keyboard.nextLine();
+							String contactNames = keyboard.nextLine();
+							event.contactsNames[0] = contactNames;
+							event.names = contactNames;
 
 							// check if the contact exists or not
 							if (contactsbBST.search_nameContact(event.contactsNames[0])) {
@@ -386,20 +390,19 @@ public class Phonebook {
 								// contact = contactsbBST.retrieve();
 
 								// if the contact has event complexity event would not be added
-								if (event.addEvent(event, events)) {
+								if (events.addEvent(event, events, size)) {
 
-									System.out.println("\n appointment scheduled successfully!");
-									// here event will be added to contact's own event list
-
+									System.out.println("\nappointment scheduled successfully!");
+									break;
 								} else
-									System.out.println("\n conflicted appointment with the contact");
+									System.out.println("\nconflicted appointment with the contact");
 							} else
-								System.out.println("\n Cantcat does not exists!");
-
+								System.out.println("\nCantcat does not exists!");
+								
 							break;
 						}
 					}
-
+					break;
 				}
 
 				// Print event details
@@ -417,7 +420,7 @@ public class Phonebook {
 							input3 = keyboard.nextInt();
 							trueInput3 = true;
 						} catch (InputMismatchException e) {
-							System.out.println("Invalid input. Please enter a valid integer.");
+							System.out.println("\nInvalid input. Please enter a valid integer.");
 							keyboard.next();
 						}
 					}
@@ -434,17 +437,18 @@ public class Phonebook {
 								events.findFirst();
 
 								while (events.current != null) {
+									
 									for (int i = 0; i < events.current.data.contactsNames.length; i++) {
 										if (events.current.data.contactsNames[i].equalsIgnoreCase(name)) {
 											System.out.println(events.retrieve());
 										}
-										events.findNext();
 									}
+									events.findNext();
 								}
 								if (events.empty())
-									System.out.println("\n this contact has no events!");
+									System.out.println("\nthis contact has no events!");
 							} else
-								System.out.println("\n Cantcat does not exists!");
+								System.out.println("\nCantcat does not exists!");
 
 							break;
 						}
@@ -483,7 +487,7 @@ public class Phonebook {
 					contactsbBST.findFirstName(firstName, found);
 
 					if (found == false) {
-						System.out.println("No contacts found with the first name: " + firstName);
+						System.out.println("\nNo contacts found with the first name: " + firstName);
 					}
 
 					break;
@@ -506,7 +510,7 @@ public class Phonebook {
 					System.out.println("\nGoodbye!");
 					break;
 				default:
-					System.out.println("\n enter a number between 1 and 8");
+					System.out.println("\nenter a number between 1 and 8");
 
 			}
 
