@@ -484,9 +484,9 @@ public class Phonebook {
 
 					boolean found = false; // to check if at least one contact was found
 
-					contactsbBST.findFirstName(firstName, found);
+					contactsbBST.findFirstName(contactsbBST.getRoot().data.name, firstName);
 
-					if (found == false) {
+					if (contactsbBST.findFirstName(contactsbBST.getRoot().data.name,firstName) == false) {
 						System.out.println("\nNo contacts found with the first name: " + firstName);
 					}
 
