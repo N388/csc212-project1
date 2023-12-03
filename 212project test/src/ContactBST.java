@@ -64,20 +64,22 @@ public class ContactBST<T extends Comparable<T>> {
 	}
 
 	public boolean deletContact(String key, LinkedList<Event> events) {
-		Boolean removed = new Boolean(false);
+		Boolean removed = false;
 		BSTContactNode<T> p;
 		p = remove_aux(key, root, removed);
 		current = root = p;
 		if (!events.empty()) {
-			if (events.searchEventName(((Contact) p.data).name)) {
+			if (events.searchEventName(((Contact) p.data).name, events)) {
 				events.findFirst();
 				while (events.current != null) {
-					events.deletEvent(((Contact) p.data).name);
+					events.deletEvent(((Contact) p.data).name, events);
+
 					events.findNext();
 				}
+				return true;
 			}
 		}
-		return removed.booleanValue();
+		return true;
 	}
 
 	public BSTContactNode<T> remove_aux(String key, BSTContactNode<T> p, Boolean flag) {
@@ -219,13 +221,13 @@ public class ContactBST<T extends Comparable<T>> {
 
 	}
 
-	public boolean findFirstName(String firstName,Boolean found) {
+	public boolean findFirstName(String firstName, Boolean found) {
 		Boolean flag = new Boolean(false);
 		flag = findFirstName(root, firstName, flag, found);
 		return flag;
 	}
 
-	private boolean findFirstName(BSTContactNode<T> p, String firstName, Boolean flag,Boolean found) {
+	private boolean findFirstName(BSTContactNode<T> p, String firstName, Boolean flag, Boolean found) {
 		if (p == null)
 			return false;
 
@@ -241,7 +243,8 @@ public class ContactBST<T extends Comparable<T>> {
 		if (((Contact) p.data).name.compareTo(firstName) > 0)
 			return findFirstName(p.left, firstName, flag, found);
 		else
-			return findFirstName(p.right, firstName, flag,found);
+			return findFirstName(p.right, firstName, flag, found);
 
 	}
+
 }
